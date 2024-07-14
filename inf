@@ -1,41 +1,10 @@
-async function getIp() {
-    try {
-        const response = await fetch('https://api64.ipify.org?format=json');
-        if (!response.ok) {
-            throw new Error('Failed to get IP');
-        }
-        const data = await response.json();
-        return data.ip;
-    } catch (error) {
-        console.error('Error fetching IP:', error);
-        return null;
-    }
+function get() {
+    fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/')
+        .then(response => response.json())
+        .then(data => {
+        console.log(data);
+    })
+        .catch(error => alert('Error Cant Fetch', sc()));
 }
 
-// Função para enviar o IP para o servidor Node.js
-async function sendIpToServer() {
-    const ip = await getIp();
-    if (ip) {
-        fetch('https://seu-servidor-ip:3000/log-ip', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ip: ip }),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to send IP');
-            }
-            console.log('IP sent successfully:', ip);
-        })
-        .catch(error => {
-            console.error('Error sending IP:', error);
-        });
-    } else {
-        console.error('IP not retrieved');
-    }
-}
-
-// Chama a função para enviar o IP quando a página carrega
-sendIpToServer();
+get();
