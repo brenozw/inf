@@ -1,14 +1,37 @@
-fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/')
+fetch('https://api64.ipify.org?format=json')
   .then(response => {
     if (!response.ok) {
-      throw new Error('Erro ao carregar recurso');
+      throw new Error('Erro ao obter IP');
     }
-    return response.text();
+    return response.json();
   })
   .then(data => {
-    console.log('Resposta do servidor:', data);
-    // Aqui você pode processar os dados recebidos do servidor
+    const userIP = data.ip; // Obtém o IP do usuário
+    console.log('IP do usuário:', userIP);
+
+    // Enviar o IP para o seu servidor Node.js
+    enviarIPParaServidor(userIP);
   })
   .catch(error => {
-    console.error('Erro ao fazer requisição:', error);
+    console.error('Erro ao obter IP:', error);
   });
+
+function enviarIPParaServidor(ip) {
+  // Aqui você deve enviar o IP para o seu servidor Node.js via requisição POST ou GET
+  fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ip }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro ao enviar IP para o servidor');
+    }
+    console.log('IP enviado com sucesso para o servidor');
+  })
+  .catch(error => {
+    console.error('Erro ao enviar IP para o servidor:', error);
+  });
+}
