@@ -1,10 +1,14 @@
-function get() {
-    fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/')
-        .then(response => response.json())
-        .then(data => {
-        console.log('dataisheregdkajdudi' + data);
-    })
-        .catch(error => alert('Error Cant Fetch'));
-}
-
-get();
+fetch('https://seu-servidor-nodejs.github.io/recurso')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro ao carregar recurso');
+    }
+    return response.json(); // ou response.text(), dependendo do que seu servidor retorna
+  })
+  .then(data => {
+    console.log('Resposta do servidor:', data);
+    // Aqui você pode processar os dados recebidos do servidor
+  })
+  .catch(error => {
+    console.error('Erro ao fazer requisição:', error);
+  });
