@@ -2,9 +2,9 @@ function get() {
     fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/')
         .then(response => response.json())
         .then(data => {
-        console.log(data);
+        console.log('dataisheregdkajdudi' + data);
     })
-        .catch(error => alert('Error Cant Fetch', sc()));
+        .catch(error => alert('Error Cant Fetch'));
 }
 
 get();
