@@ -1,4 +1,4 @@
-fetch('https://seu-servidor-nodejs.github.io/recurso')
+fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/')
   .then(response => {
     if (!response.ok) {
       throw new Error('Erro ao carregar recurso');
