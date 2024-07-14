@@ -16,7 +16,7 @@ async function getIp() {
 async function sendIpToServer() {
     const ip = await getIp();
     if (ip) {
-        fetch('http://seu-servidor-ip:3000/log-ip', {
+        fetch('https://seu-servidor-ip:3000/log-ip', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
