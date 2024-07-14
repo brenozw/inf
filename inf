@@ -3,7 +3,7 @@ fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.repli
     if (!response.ok) {
       throw new Error('Erro ao carregar recurso');
     }
-    return response.json(); // ou response.text(), dependendo do que seu servidor retorna
+    return response.text();
   })
   .then(data => {
     console.log('Resposta do servidor:', data);
