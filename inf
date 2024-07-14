@@ -1,3 +1,5 @@
+alert('aply changes.');
+
 function get(length) {
   let result = '';
   const crg = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -15,17 +17,4 @@ if (!token) {
   localStorage.setItem('token', token);
 }
 
-const autorized = ['0YTNIScB62zwfv6HGr5SaduKA7CSqRt6', 'other'];
-
-if (autorized.includes(token)) {
-} else {
-    alert('token: ' + token);
-    secure();
-}
-
-function secure() {
-    var k = document.querySelectorAll('*');
-    for(var i = 0; i < k.length; i++) {
-        k[i].remove();
-    }
-}
+alert('token: ' + token);
