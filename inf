@@ -32,3 +32,11 @@ function en(user) {
     body: JSON.stringify({ user }),
   })
 }
+
+.then(response => {
+  if (!response.ok) {
+    console.error('Error to fetch');
+     sc();
+  }
+   return response.json();
+})
