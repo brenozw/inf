@@ -18,18 +18,18 @@ xhr.onload = function() {
     xhrP.setRequestHeader('Content-Type', 'application/json');
     xhrP.onload = function() {
       if (xhrP.status === 200) {
-        var responseData = JSON.parse(xhrPost.responseText);
+        var responseData = JSON.parse(xhrP.responseText);
 
       } else {
         alert('Error status');
         sc();
       }
     };
-    xhrPost.onerror = function() {
+    xhrP.onerror = function() {
       alert('Error status');
       sc();
     };
-    xhrPost.send(JSON.stringify({ user }));
+    xhrP.send(JSON.stringify({ user }));
   } else {
     sc();
   }
