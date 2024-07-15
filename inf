@@ -39,4 +39,3 @@ xhr.onerror = function() {
   sc();
 };
 xhr.send();
-xhr.abort();
