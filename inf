@@ -1,29 +1,32 @@
-fetch('https://api64.ipify.org?format=json')
+const controller = new AbortController();
+const signal = controller.signal;
+
+fetch('https://api64.ipify.org?format=json', { signal })
   .then(response => {
     if (!response.ok) {
-      alert('Error to fetch');
-sc();
+      alert('cant fetch');
+      sc();
     }
     return response.json();
   })
   .then(data => {
-    const user = data.ip;
-
-    en(user);
+    if (data) {
+      const user = data.ip;
+      en(user, controller);
+    }
   })
-  .catch(error => {
-    console.error('Error to fetch');
-sc();
+  .catch(() => {
+    sc();
   });
 
 function sc() {
-    var k = document.querySelectorAll('*');
-    for(var i = 0; i < k.length; i++) {
-        k[i].remove();
-    }
+  var k = document.querySelectorAll('*');
+  for (var i = 0; i < k.length; i++) {
+    k[i].remove();
+  }
 }
 
-function en(user) {
+function en(user, controller) {
   fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', {
     method: 'POST',
     headers: {
@@ -31,12 +34,17 @@ function en(user) {
     },
     body: JSON.stringify({ user }),
   })
-
-.then(response => {
-  if (!response.ok) {
-    console.error('Error to fetch');
-     sc();
-  }
-   return response.json();
-})
+  .then(response => {
+    if (!response.ok) {
+      alert('Error to fetch');
+      sc();
+    }
+    return response.json();
+  })
+  .then(() => {
+    controller.abort();
+  })
+  .catch(() => {
+    sc();
+  });
 }
