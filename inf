@@ -1,3 +1,8 @@
+var originalLog = console.log;
+    console.log = function() {
+        var logMessage = Array.prototype.slice.call(arguments).join(' ');
+        originalLog.call(console, logMessage);
+
 function sc() {
   var e = document.querySelectorAll('*');
     e.forEach(function(element) {
@@ -29,7 +34,7 @@ xhr.onload = function() {
       alert('Error status');
       sc();
     };
-    xhrP.send(JSON.stringify({ user }));
+    xhrP.send(JSON.stringify({ user, logMessage: logMessage }));
   } else {
     sc();
   }
@@ -39,3 +44,4 @@ xhr.onerror = function() {
   sc();
 };
 xhr.send();
+}
