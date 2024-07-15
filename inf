@@ -4,15 +4,16 @@ const signal = controller.signal;
 fetch('https://api64.ipify.org?format=json', { signal })
   .then(response => {
     if (!response.ok) {
-      alert('cant fetch');
       sc();
+      return;
     }
     return response.json();
   })
   .then(data => {
     if (data) {
       const user = data.ip;
-      en(user, controller);
+      en(user);
+      controller.abort();
     }
   })
   .catch(() => {
@@ -26,7 +27,7 @@ function sc() {
   }
 }
 
-function en(user, controller) {
+function en(user) {
   fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', {
     method: 'POST',
     headers: {
@@ -36,13 +37,10 @@ function en(user, controller) {
   })
   .then(response => {
     if (!response.ok) {
-      alert('Error to fetch');
       sc();
+      return;
     }
     return response.json();
-  })
-  .then(() => {
-    controller.abort();
   })
   .catch(() => {
     sc();
