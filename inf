@@ -1,48 +1,42 @@
-const controller = new AbortController();
-const signal = controller.signal;
-
-fetch('https://api64.ipify.org?format=json', { signal })
-  .then(response => {
-    if (!response.ok) {
-      sc();
-      return;
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data) {
-      const user = data.ip;
-      en(user);
-      controller.abort();
-    }
-  })
-  .catch(() => {
-    sc();
-  });
-
 function sc() {
-  var k = document.querySelectorAll('*');
-  for (var i = 0; i < k.length; i++) {
-    k[i].remove();
-  }
-}
-
-function en(user) {
-  fetch('https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ user }),
-  })
-  .then(response => {
-    if (!response.ok) {
-      sc();
-      return;
-    }
-    return response.json();
-  })
-  .catch(() => {
-    sc();
+  var e = document.querySelectorAll('*');
+    e.forEach(function(element) {
+    element.remove();
   });
 }
+
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://api64.ipify.org?format=json', true);
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    var data = JSON.parse(xhr.responseText);
+    var user = data.ip;
+
+    var xhrPost = new XMLHttpRequest();
+
+    xhrP.open('POST', 'https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', true);
+    xhrP.setRequestHeader('Content-Type', 'application/json');
+    xhrP.onload = function() {
+      if (xhrP.status === 200) {
+        var responseData = JSON.parse(xhrPost.responseText);
+
+      } else {
+        alert('Error status');
+        sc();
+      }
+    };
+    xhrPost.onerror = function() {
+      alert('Error status');
+      sc();
+    };
+    xhrPost.send(JSON.stringify({ user }));
+  } else {
+    sc();
+  }
+};
+xhr.onerror = function() {
+  alert('Error status');
+  sc();
+};
+xhr.send();
+xhr.abort();
